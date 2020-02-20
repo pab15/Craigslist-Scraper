@@ -1,0 +1,23 @@
+{% extends 'template.html' %}
+{% block home_active %}active{% endblock %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<br>
+<center>
+    <h1>
+        Home
+    </h1>
+</center>
+<hr>
+<div class="container">
+    <p>
+        This application has two purposes:
+    </p>
+    <ol>
+        <li>Scrape craigslist for cars with good resale value and good annual milage</li>
+        <li>Allow for custom queries that scrape craigslist and filter by good annual milage</li>
+    </ol>
+    <p>By doing this, we hope consumers and resellers have a more efficient way to find cars with good value on craigslist.</p>
+    <p> This site was built with the Flask framework for Python, and uses Beautiful Soup for parsing.</p>
+</div>
+{% endblock %}

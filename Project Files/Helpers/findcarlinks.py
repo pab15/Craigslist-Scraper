@@ -1,9 +1,11 @@
 import re
+import ssl
 import urllib
 from bs4 import BeautifulSoup
 import urllib.request, urllib.parse, urllib.error
-# for tests
-import urlmanager as urlm
+from Helpers.urlmanager import *
+# Uncomment to test in this file:
+# from urlmanager import *
 
 def findCarLinks(craigslist_url):
     result = []
@@ -18,12 +20,11 @@ def findCarLinks(craigslist_url):
 
 def parsePages(page_url):
     result = {}
-    result['url'] = page_url
 
     response = urllib.request.urlopen(page_url)
     html = response.read()
     soup = BeautifulSoup(html, 'html.parser')
-
+    result['url'] = page_url
     info = soup.find_all('b')
     counter = 1
     for piece in info:
@@ -34,68 +35,74 @@ def parsePages(page_url):
             result[split_pieces[0]] = split_pieces[1]
         else:
             result['car'] = split_pieces[0]
+            try:
+                int(split_pieces[0][0:4])
+            except:
+                result['model year'] = ""
+            else:
+                result['model year'] = split_pieces[0][0:4]
+            price = soup.find_all('span', attrs={'class':'price'})
+            result['price'] = price[0].string.strip('$')
+
         counter += 1
-
-    price = soup.find_all('span', attrs={'class':'price'})
-    result['price'] = price[0].string.strip('$')
-
     return result
 
-def createPriceDict(list_links):
-    result = {}
-    for link in list_links:
-        result[parsePages(link)['car']] = int(parsePages(link)['price'])
+def createFile(car):
+    file_name = car + '.csv'
+    f = open('data\\cardata\\' + file_name, 'w')
+    potential_values = (['url', 'car', 'price', 'model year', 'VIN', 'condition', 
+                        'cylinders', 'drive', 'fuel', 'odometer', 'paint color', 
+                        'size', 'title status', 'transmission', 'type'])
+    for value in potential_values:
+        f.write(value + ',')
+    f.write('\n')
+    f.close()
+
+def dictToCSV(car, dictionary):
+    file_name = car + '.csv'
+    potential_values = (['url', 'car', 'price', 'model year', 'VIN', 'condition', 
+                        'cylinders', 'drive', 'fuel', 'odometer', 'paint color', 
+                        'size', 'title status', 'transmission', 'type'])
+    f = open('data\\cardata\\' + file_name, 'a')
+    for value in potential_values:
+        is_valid = dictionary.get(value)
+        if is_valid:
+            f.write(dictionary[value] + ',')
+        else:
+            f.write(',')
+    f.write('\n')
+    f.close()
+
+def getBestCars():
+    result = []
+    scusa_url = 'https://santanderconsumerusa.com/blog/25-vehicles-that-hold-value-best-over-five-years-iseecars-com'
+
+    context = ssl._create_unverified_context()
+    response = urllib.request.urlopen(scusa_url, context=context)
+    html = response.read()
+    soup = BeautifulSoup(html, 'html.parser')
+
+    cars = soup.find_all('strong')
+    counter = 1
+    for car in cars:
+        if (car.parent.name != 'figcaption'):
+            if (counter % 2 == 0):
+                result.append(car.string)
+                counter += 1
+            else:
+                counter += 1
     return result
-
-def averageCarValues(value_dictionary):
-    sum_prices = 0
-    counter = 0
-    for car in value_dictionary:
-        sum_prices += value_dictionary[car]
-        counter += 1
-    avg = round((sum_prices / counter), 2)
-    return avg
-
-def compareToAvg(car_price, avg_price):
-    return round((car_price - avg_price), 5)
-
-def averagePriceToMilage(links):
-    sum_price_per_mile = 0
-    counter = 0
-    for link in links:
-        read_from = parsePages(link)
-        price_per_mile = int(read_from['price']) / int(read_from['odometer'])
-        sum_price_per_mile += price_per_mile
-        counter += 1
-    avg = round((sum_price_per_mile / counter), 5)
-    return avg
-def calcPricePerMile(link_parsed):
-    ppm = round((int(link_parsed['price']) / int(link_parsed['odometer'])), 5)
-    return ppm
-
-def comparePricePerMilage(car_price_ratio, avg_price_ratio):
-    return round((car_price_ratio - avg_price_ratio), 5)
 
 if __name__ == '__main__':
-    url = (urlm.urlManager('humboldt', 'all') + 
-                        urlm.addDistance('100') + 
-                        urlm.addPostal('95521') + 
-                        urlm.addMinPrice('1000') + 
-                        urlm.addMaxPrice('5000') + 
-                        urlm.addMakeModel('Ford Explorer'))
-    links = findCarLinks(url)
-    print(url)
-    print(links)
-    print('\n')
-    car_vals = createPriceDict(links)
-    avg = averageCarValues(car_vals)
-    avgpm = averagePriceToMilage(links)
-    print(avg)
-    print(avgpm)
-    for link in links:
-        print(parsePages(link))
-        print(compareToAvg(int(parsePages(link)['price']), avg))
-        ppm = calcPricePerMile(parsePages(link))
-        print(comparePricePerMilage(ppm, avgpm))
+    array = getBestCars()
+    master_links = {}
+    for car in array:
+        url = urlManager('humboldt', 'owner') + addMakeModel(car)
+        master_links[car] = findCarLinks(url)
+
+    for car in master_links:
+        createFile(car)
+        for link in master_links[car]:
+            dictToCSV(car, parsePages(link))
 
     
