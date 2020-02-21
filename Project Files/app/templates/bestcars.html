@@ -9,28 +9,28 @@
     </h1>
 </center>
 <hr>
-{% for message in get_flashed_messages() %}
-    <div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        {{ message }}
-    </div>
-{% endfor %}
 <div class="container">
     <p>
-        This search allows you to view all posts on your local craigslist with annual milage under the given milage below.
+        This search allows you to view all posts on your local craigslist with annual mileage under the given mileage below.
         The car make and models are taken from 
         <a href='https://santanderconsumerusa.com/blog/25-vehicles-that-hold-value-best-over-five-years-iseecars-com'>Santander Consumer USA</a>
         based on value retention over 5 years. Althugh not all results are from the past 5 years, older versions of these cars 
         still retain value well, and so those cars are displayed.
-        If the post has no milage listed next to 'odometer:', then the post will be ignored.
+        If the post has no mileage listed next to 'odometer:', then the post will be ignored.
     </p>
 </div>
 <center>
     <form action="" method="POST" novalidate>
         {{form.hidden_tag()}}
         <p>
-            {{form.target_annual_milage(size=32, placeholder="Annual Milage:")}}
+            {{form.target_annual_mileage(size=32, placeholder="Annual Milage:")}}
         </p>
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
         <p>
             {{form.submit()}}
         </p>

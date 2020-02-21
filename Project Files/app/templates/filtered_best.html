@@ -1,0 +1,26 @@
+{% extends "template.html" %}
+{% block best_active %}active{% endblock %}
+{% block title %}Filtered{% endblock %}
+{% block content %}
+<br>
+<center>
+    <h1>
+        Filtered Results
+    </h1>
+</center>
+<hr>
+<div class="container">
+    {% for dict in list_cars %}
+        <div class="container">
+            {% for key in dict %}
+                {% if key == 'Url:' %}
+                    <p>{{key}} <a href='{{dict[key]}}'>{{dict[key]}}</a></p>
+                {% elif dict[key] != '' %}
+                    <center><p class="info">{{key}} {{dict[key]}}</p></center>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <hr>
+    {% endfor %}
+</div>
+{% endblock %}
