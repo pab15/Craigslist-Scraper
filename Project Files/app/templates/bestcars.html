@@ -17,11 +17,15 @@
         based on value retention over 5 years. Althugh not all results are from the past 5 years, older versions of these cars 
         still retain value well, and so those cars are displayed.
         If the post has no mileage listed next to 'odometer:', then the post will be ignored.
+        Leave price blank for all results, or filter by price by inputing a maximum price.
     </p>
 </div>
 <center>
     <form action="" method="POST" novalidate>
         {{form.hidden_tag()}}
+        <p>
+            {{form.target_price(size=32, placeholder="Max Target Price:")}}
+        </p>
         <p>
             {{form.target_annual_mileage(size=32, placeholder="Annual Milage:")}}
         </p>

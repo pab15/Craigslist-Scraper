@@ -9,17 +9,32 @@
     </h1>
 </center>
 <hr>
-<div class="container">
+<div class="container-fluid">
     {% for dict in list_cars %}
-        <div class="container">
-            {% for key in dict %}
-                {% if key == 'Url:' %}
-                    <p>{{key}} <a href='{{dict[key]}}'>{{dict[key]}}</a></p>
-                {% elif dict[key] != '' %}
-                    <center><p class="info">{{key}} {{dict[key]}}</p></center>
-                {% endif %}
-            {% endfor %}
-        </div>
+        <p>
+            <div class="row">
+                {% for key in dict %}
+                    {% if key == 'Pic Link:' %}
+                        {% if dict[key] == '' %}
+                            <div class="col-lg-4">
+                                <center><p>No Picture</p></center>
+                            </div>
+                            <div class="col-lg-8">
+                        {% else %}
+                            <div class="col-lg-4">
+                                <center><img src='{{dict[key]}}' alt="car-pic" width="300" height="300"/></center>
+                            </div>
+                            <div class="col-lg-8">
+                        {% endif %}
+                    {% elif key == 'Url:' %}
+                        {{key}} <a href='{{dict[key]}}'>{{dict[key]}}</a><br>
+                    {% elif dict[key] != '' %}
+                        {{key}} {{dict[key]}} <br>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
+        </p>
         <hr>
     {% endfor %}
 </div>

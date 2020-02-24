@@ -26,13 +26,26 @@ def parsePages(page_url):
     soup = BeautifulSoup(html, 'html.parser')
     result['url'] = page_url
     info = soup.find_all('b')
+    pic_link = soup.find_all('img', attrs={'title':'1'})
+    try:
+        pic_link[0].get('src')
+    except:
+        result['pic'] = ""
+    else:
+        result['pic'] = pic_link[0].get('src')
     counter = 1
     for piece in info:
         new_piece = piece.parent.getText().encode('ascii', 'ignore').decode('utf-8')
         split_pieces = new_piece.split(':')
         if counter > 1:
-            split_pieces[1] = split_pieces[1].replace(" ", "", 1)
-            result[split_pieces[0]] = split_pieces[1]
+            try:
+                split_pieces[1] = split_pieces[1].replace(" ", "", 1)
+                result[split_pieces[0]] = split_pieces[1]
+            except:
+                print('badcarvalue')
+            else:
+                split_pieces[1] = split_pieces[1].replace(" ", "", 1)
+                result[split_pieces[0]] = split_pieces[1]
         else:
             result['car'] = split_pieces[0]
             try:
@@ -42,7 +55,13 @@ def parsePages(page_url):
             else:
                 result['model year'] = split_pieces[0][0:4]
             price = soup.find_all('span', attrs={'class':'price'})
-            result['price'] = price[0].string.strip('$')
+            try:
+                price[0].string.strip('$')
+            except:
+                result['price'] = '0'
+                result['model year'] = ""
+            else:
+                result['price'] = price[0].string.strip('$')
 
         counter += 1
     return result
@@ -52,7 +71,7 @@ def createFile(car):
     f = open('data\\cardata\\' + file_name, 'w')
     potential_values = (['url', 'car', 'price', 'model year', 'VIN', 'condition', 
                         'cylinders', 'drive', 'fuel', 'odometer', 'paint color', 
-                        'size', 'title status', 'transmission', 'type'])
+                        'size', 'title status', 'transmission', 'type', 'pic'])
     for value in potential_values:
         f.write(value + ',')
     f.write('\n')
@@ -62,7 +81,7 @@ def dictToCSV(car, dictionary):
     file_name = car + '.csv'
     potential_values = (['url', 'car', 'price', 'model year', 'VIN', 'condition', 
                         'cylinders', 'drive', 'fuel', 'odometer', 'paint color', 
-                        'size', 'title status', 'transmission', 'type'])
+                        'size', 'title status', 'transmission', 'type', 'pic'])
     f = open('data\\cardata\\' + file_name, 'a')
     for value in potential_values:
         is_valid = dictionary.get(value)

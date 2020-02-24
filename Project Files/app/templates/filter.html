@@ -1,0 +1,26 @@
+{% extends "template.html" %}
+{% block search_active %}active{% endblock %}
+{% block title %}Refine Search{% endblock %}
+{% block content %}
+<br>
+    <center>
+        <h1>
+            Refine Search
+        </h1>
+    </center>
+    <hr>
+    <div class="container">
+        To refresh the car lists and search in a new area, click refresh and enter a new search area below:
+    </div>
+    <br>
+    <center>
+        <form action="" method='POST'>
+            <p>
+                {{form.new_area(size=32, placeholder="New Search Area:")}}
+            </p>
+            <p>
+                {{form.refresh()}}
+            </p>
+        </form>
+    </center>
+{% endblock %}
