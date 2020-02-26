@@ -10,13 +10,26 @@
     </center>
     <hr>
     <div class="container">
-        To refresh the car lists and search in a new area, click refresh and enter a new search area below:
+        <center>
+            <p>
+                To refresh the car lists and search in a new area, click refresh and enter a new search area below:
+            </p>
+    </center>
     </div>
     <br>
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
     <center>
         <form action="" method='POST'>
             <p>
                 {{form.new_area(size=32, placeholder="New Search Area:")}}
+            </p>
+            <p>
+                {{form.car_make_model(size=32, placeholder="Car Make Model:")}}
             </p>
             <p>
                 {{form.refresh()}}

@@ -66,9 +66,9 @@ def parsePages(page_url):
         counter += 1
     return result
 
-def createFile(car):
+def createFile(car, file_path):
     file_name = car + '.csv'
-    f = open('data\\cardata\\' + file_name, 'w')
+    f = open(file_path + file_name, 'w')
     potential_values = (['url', 'car', 'price', 'model year', 'VIN', 'condition', 
                         'cylinders', 'drive', 'fuel', 'odometer', 'paint color', 
                         'size', 'title status', 'transmission', 'type', 'pic'])
@@ -77,12 +77,12 @@ def createFile(car):
     f.write('\n')
     f.close()
 
-def dictToCSV(car, dictionary):
+def dictToCSV(car, dictionary, file_path):
     file_name = car + '.csv'
     potential_values = (['url', 'car', 'price', 'model year', 'VIN', 'condition', 
                         'cylinders', 'drive', 'fuel', 'odometer', 'paint color', 
                         'size', 'title status', 'transmission', 'type', 'pic'])
-    f = open('data\\cardata\\' + file_name, 'a')
+    f = open(file_path + file_name, 'a')
     for value in potential_values:
         is_valid = dictionary.get(value)
         if is_valid:
@@ -120,8 +120,8 @@ if __name__ == '__main__':
         master_links[car] = findCarLinks(url)
 
     for car in master_links:
-        createFile(car)
+        createFile(car, 'data\\cardata\\')
         for link in master_links[car]:
-            dictToCSV(car, parsePages(link))
+            dictToCSV(car, parsePages(link), 'data\\cardata\\')
 
     

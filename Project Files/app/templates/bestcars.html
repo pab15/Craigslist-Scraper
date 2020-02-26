@@ -36,6 +36,10 @@
             </div>
         {% endfor %}
         <p>
+            {{form.checkbox.label}}
+            {{form.checkbox()}}
+        </p>
+        <p>
             {{form.submit()}}
         </p>
     </form>
