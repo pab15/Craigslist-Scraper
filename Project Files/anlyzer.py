@@ -41,6 +41,8 @@ def lowAnnualMilage(list_csv_locations, max_annual_miles, file_path):
                 else:
                     if (row[9] != '') and row[3] != '':
                         years_drove = current_year - int(row[3])
+                        if years_drove == 0:
+                            years_drove = 1
                         if int(row[9]) < 400 and years_drove > 2:
                             annual_miles = round(((int(row[9]) * 1000) / years_drove), 2)
                             if annual_miles <= max_annual_miles:

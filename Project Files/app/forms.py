@@ -13,3 +13,8 @@ class InDepthSearch(FlaskForm):
     car_make_model = StringField('Car Make', [DataRequired()])
     new_area = StringField('New Area', [DataRequired()])
     refresh = SubmitField('Refresh')
+
+class RefreshForm(FlaskForm):
+    new_area = StringField('New Area', [DataRequired()])
+    owner_type = StringField('Owner Type', [DataRequired()])
+    refresh = SubmitField('Refresh')

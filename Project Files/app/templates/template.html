@@ -16,13 +16,16 @@
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item {% block home_active %}{% endblock %}">
-              <a class="nav-link" href="{{url_for('index')}}">Home <span class="sr-only"></span></a>
+              <a class="nav-link" href="{{url_for('index')}}">Home<span class="sr-only"></span></a>
             </li>
             <li class="nav-item {% block best_active %}{% endblock %}">
               <a class="nav-link" href="{{url_for('best_cars')}}">Best Resale</a>
             </li>
             <li class="nav-item {% block search_active %}{% endblock %}">
               <a class="nav-link" href="{{url_for('filter')}}">Refine Search</a>
+            </li>
+            <li class="nav-item {% block refresh_active %}{% endblock %}">
+              <a class="nav-link" href="{{url_for('refreshlists')}}">Refresh List</a>
             </li>
           </ul>
           <span class="navbar-text">

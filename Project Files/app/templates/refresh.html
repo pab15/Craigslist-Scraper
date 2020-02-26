@@ -1,0 +1,39 @@
+{% extends 'template.html' %}
+{% block refresh_active %}active{% endblock %}
+{% block title %}Refresh Lists{% endblock %}
+{% block content %}
+<br>
+<center>
+    <h1>
+        Refresh Lists
+    </h1>
+</center>
+<hr>
+<br>
+<div class="container">
+    <center>
+        <p>
+            To refresh the list found at <a href='https://santanderconsumerusa.com/blog/25-vehicles-that-hold-value-best-over-five-years-iseecars-com'>Santander Consumer USA</a>
+            and get updated postings, enter a new search area and owner type and press refresh:
+        </p>
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+        <form action="" method="POST">
+            {{form.hidden_tag()}}
+            <p>
+                {{form.new_area(size=32, placeholder="New Search Area:")}}
+            </p>
+            <p>
+                {{form.owner_type(size=32, placeholder="Owner Type:")}}
+            </p>
+            <p>
+                {{form.refresh()}}
+            </p>
+        </form>
+    </center>
+</div>
+{% endblock %}

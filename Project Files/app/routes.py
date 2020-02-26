@@ -4,7 +4,7 @@ from app import app
 from anlyzer import *
 from Helpers.findcarlinks import *
 from Helpers.urlmanager import *
-from app.forms import BestResaleForm, InDepthSearch
+from app.forms import BestResaleForm, InDepthSearch, RefreshForm
 from flask import redirect, url_for, render_template, request, session, flash
 
 @app.route('/')
@@ -173,3 +173,22 @@ def filter():
         return render_template('filter.html', form=form)
     else:
         return render_template('filter.html', form=form)
+
+@app.route('/refresh-lists', methods=['GET', 'POST'])
+def refreshlists():
+    form = RefreshForm()
+    if request.method == 'POST':
+        array = getBestCars()
+        master_links = {}
+        for car in array:
+            url = urlManager(request.form['new_area'], request.form['owner_type']) + addMakeModel(car)
+            master_links[car] = findCarLinks(url)
+
+        for car in master_links:
+            createFile(car, 'data\\cardata\\')
+            for link in master_links[car]:
+                dictToCSV(car, parsePages(link), 'data\\cardata\\')
+        flash('CSVs Updated!')
+        return render_template('refresh.html', form=form)
+    else:
+        return render_template('refresh.html', form=form)
