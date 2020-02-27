@@ -1,5 +1,5 @@
 # Craigslist-Scraper
-bs4 Craigslist Scraper
+Craigslist Scraper made using Beautiful Soup 4 and Flask.
 
 # Imports:
 * pip install beautifulsoup4
